@@ -83,10 +83,14 @@ for f = 1:size(imageFileList,1)
             y_hi = floor(hgt/binsHigh * j);
             
             texton_patch = texton_ind.data( (texton_ind.x > x_lo) & (texton_ind.x <= x_hi) & ...
-                                            (texton_ind.y > y_lo) & (texton_ind.y <= y_hi));
+                                            (texton_ind.y > y_lo) & (texton_ind.y <= y_hi),:);
+            
+            %maxpool the texton_patch
+            maxpool_patch = max(texton_patch,[],2);
             
             % make histogram of features in bin
-            pyramid_cell{1}(i,j,:) = hist(texton_patch, 1:dictionarySize)./length(texton_ind.data);
+            %pyramid_cell{1}(i,j,:) = hist(texton_patch, 1:dictionarySize)./length(texton_ind.data);
+            pyramid_cell{1}(i,j,:) = hist(maxpool_patch, 1:dictionarySize)./length(texton_ind.data);
         end
     end
 
@@ -96,9 +100,15 @@ for f = 1:size(imageFileList,1)
         pyramid_cell{l} = zeros(num_bins, num_bins, dictionarySize);
         for i=1:num_bins
             for j=1:num_bins
+                %sum pool
                 pyramid_cell{l}(i,j,:) = ...
                 pyramid_cell{l-1}(2*i-1,2*j-1,:) + pyramid_cell{l-1}(2*i,2*j-1,:) + ...
                 pyramid_cell{l-1}(2*i-1,2*j,:) + pyramid_cell{l-1}(2*i,2*j,:);
+
+%                %max pool
+%                pyramid_cell{l}(i,j,:) = ...
+%                max(pyramid_cell{l-1}(2*i-1,2*j-1,:), pyramid_cell{l-1}(2*i,2*j-1,:), ...
+%                    pyramid_cell{l-1}(2*i-1,2*j,:), pyramid_cell{l-1}(2*i,2*j,:));
             end
         end
         num_bins = num_bins/2;
@@ -107,7 +117,10 @@ for f = 1:size(imageFileList,1)
     %% stack all the histograms with appropriate weights
     pyramid = [];
     for l = 1:pyramidLevels-1
-        pyramid = [pyramid pyramid_cell{l}(:)' .* 2^(-l)];
+        %normalize the pyramid cell
+        norm_cell = pyramid_cell{l}(:) / norm(pyramid_cell{l}(:),2);
+        pyramid = [pyramid norm_cell' .* 2^(-l)];
+%        pyramid = [pyramid pyramid_cell{l}(:)' .* 2^(-l)];
     end
     pyramid = [pyramid pyramid_cell{pyramidLevels}(:)' .* 2^(1-pyramidLevels)];
 
