@@ -7,10 +7,10 @@ function C = LLC(X,B,K)
 % - K: The number of nearest neighbors to use as a bases for fast encoding
 % OUTPUT:
 % - C: A MxN matrix of coded features
-fprintf('Beginning LLC encoding...\n')
+%fprintf('Beginning LLC encoding...\n')
 
 %Find the K-nearest neighbors of B to X
-fprintf('Finding %d nearest neighbors\n',K)
+%fprintf('Finding %d nearest neighbors\n',K)
 [knn_idx,knn_D] = knnsearch(B,X,'K',K);
 
 %Solve the optimization problem for each feature (Eq 7 in the paper)
@@ -21,12 +21,10 @@ end
 N = size(X,1);
 M = size(B,1);
 
-fprintf('Calculating C')
+%fprintf('Calculating C')
 C = zeros(N,M);
-id = tic;
 for i=1:N
   Bi = B(knn_idx(i,:),:); %knn bases: A KxD matrix
-  fprintf('feature %d/%d\n', i, N)
   %Minimizing the constrained least squares problem with respect to ci:
   %||xi - Bi*ci||^2 s.t. sum(ci) = 1
   %ci = lsqlin(Bi',X(i,:)',[],[],ones(1,K),1);
@@ -36,9 +34,4 @@ for i=1:N
   
   C(i,knn_idx(i,:)) = ci';
 end
-elapsed = toc(id);
-fprintf('time elapsed for %d features: %f\n',N,elapsed)
-pause on
-pause
-pause off
 
