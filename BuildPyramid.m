@@ -64,9 +64,10 @@ if(nargin<8)
 end
 
 %% build the pyramid
-%GenerateSiftDescriptors( imageFileList,imageBaseDir,dataBaseDir,maxImageSize,gridSpacing,patchSize,canSkip);
-GenerateSiftDescriptors2( imageFileList,imageBaseDir,dataBaseDir,maxImageSize,gridSpacing,patchSize,canSkip);
+GenerateSiftDescriptors( imageFileList,imageBaseDir,dataBaseDir,maxImageSize,gridSpacing,patchSize,canSkip);
+%GenerateSiftDescriptors2( imageFileList,imageBaseDir,dataBaseDir,maxImageSize,gridSpacing,patchSize,canSkip);
 CalculateDictionary(imageFileList,dataBaseDir,'_sift.mat',dictionarySize,numTextonImages,canSkip);
-BuildHistograms(imageFileList,dataBaseDir,'_sift.mat',dictionarySize,canSkip);
+%BuildHistograms(imageFileList,dataBaseDir,'_sift.mat',dictionarySize,canSkip);
+BuildLLCHistograms(imageFileList,dataBaseDir,'_sift.mat',dictionarySize,canSkip,5);
 pyramid_all = CompilePyramid(imageFileList,dataBaseDir,sprintf('_texton_ind_%d.mat',dictionarySize),dictionarySize,pyramidLevels,canSkip);
 end
