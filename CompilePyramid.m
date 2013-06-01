@@ -86,11 +86,11 @@ for f = 1:size(imageFileList,1)
                                             (texton_ind.y > y_lo) & (texton_ind.y <= y_hi),:);
             
             %maxpool the texton_patch
-            maxpool_patch = max(texton_patch,[],2);
+            maxpool_patch = max(texton_patch,[],1);
             
             % make histogram of features in bin
             %pyramid_cell{1}(i,j,:) = hist(texton_patch, 1:dictionarySize)./length(texton_ind.data);
-            pyramid_cell{1}(i,j,:) = hist(maxpool_patch, 1:dictionarySize)./length(texton_ind.data);
+            pyramid_cell{1}(i,j,:) = maxpool_patch;%hist(maxpool_patch, 1:dictionarySize)./length(texton_ind.data);
         end
     end
 
