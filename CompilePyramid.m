@@ -100,15 +100,15 @@ for f = 1:size(imageFileList,1)
         pyramid_cell{l} = zeros(num_bins, num_bins, dictionarySize);
         for i=1:num_bins
             for j=1:num_bins
-                %sum pool
-                pyramid_cell{l}(i,j,:) = ...
-                pyramid_cell{l-1}(2*i-1,2*j-1,:) + pyramid_cell{l-1}(2*i,2*j-1,:) + ...
-                pyramid_cell{l-1}(2*i-1,2*j,:) + pyramid_cell{l-1}(2*i,2*j,:);
-
-%                %max pool
+%                %sum pool
 %                pyramid_cell{l}(i,j,:) = ...
-%                max(pyramid_cell{l-1}(2*i-1,2*j-1,:), pyramid_cell{l-1}(2*i,2*j-1,:), ...
-%                    pyramid_cell{l-1}(2*i-1,2*j,:), pyramid_cell{l-1}(2*i,2*j,:));
+%                pyramid_cell{l-1}(2*i-1,2*j-1,:) + pyramid_cell{l-1}(2*i,2*j-1,:) + ...
+%                pyramid_cell{l-1}(2*i-1,2*j,:) + pyramid_cell{l-1}(2*i,2*j,:);
+
+                %max pool
+                pyramid_cell{l}(i,j,:) = ...
+                max(max(pyramid_cell{l-1}(2*i-1,2*j-1,:), pyramid_cell{l-1}(2*i,2*j-1,:)), ...
+                    max(pyramid_cell{l-1}(2*i-1,2*j,:), pyramid_cell{l-1}(2*i,2*j,:)));
             end
         end
         num_bins = num_bins/2;
