@@ -91,6 +91,7 @@ if ~weight
         % assign points to their nearest centroid
         last = label;
         [~,label] = max(distances);
+        label= label';
     end
     dis = ind*(sum(X.^2,2) - 2*max(distances)');
 else
