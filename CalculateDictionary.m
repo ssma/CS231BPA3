@@ -100,18 +100,21 @@ if (reduce_flag > 0) & (ndata > ndata_max)
 end
         
 %% perform clustering
-options = foptions;
-options(1) = 1; % display
-options(2) = 1;
-options(3) = 0.1; % precision
-options(5) = 1; % initialization
-options(14) = 100; % maximum iterations
+%options = foptions;
+%options(1) = 1; % display
+%options(2) = 1;
+%options(3) = 0.1; % precision
+%options(5) = 1; % initialization
+%options(14) = 100; % maximum iterations
 
 centers = zeros(dictionarySize, size(sift_all,2));
 
 %% run kmeans
 fprintf('\nRunning k-means\n');
-dictionary = sp_kmeans(centers, sift_all, options);
+[labels, dictionary, d] = fkmeans(sift_all, dictionarySize);
+%dictionary = sp_kmeans(centers, sift_all, options);
+%options = statset('MaxIter',100,'Display','iter');
+%[idx, dictionary] = kmeans(sift_all, dictionarySize,'emptyaction','singleton','options',options);
     
 fprintf('Saving texton dictionary\n');
 sp_make_dir(outFName);
