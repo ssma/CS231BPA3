@@ -8,7 +8,7 @@ image_dir = [{'../scene_categories/PARoffice'},{'../scene_categories/MITmountain
         {'../scene_categories/MITopencountry'}, {'../scene_categories/MITstreet'}, {'../scene_categories/MITinsidecity'}, ...
         {'../scene_categories/MITcoast'}, {'../scene_categories/CALsuburb'}, {'../scene_categories/bedroom'}]; 
     
-data_dir = 'new_data';
+data_dir = 'new_data2';
 
 % for other parameters, see BuildPyramid
 %fnames = []; %struct(length(image_dir),1);
@@ -61,15 +61,15 @@ for i = 1:length(image_dir)
     end
 end
 
-K1 = hist_isect(training_data, training_data);
-model = train(training_label, sparse(K1));% [,'liblinear_options', 'col']);
-K2 = hist_isect(testing_data, training_data);
-[predicted_label, accuracy, decision_values] = predict(testing_label, sparse(K2), model );
+%K1 = hist_isect(training_data, training_data);
+%model = train(training_label, sparse(K1));% [,'liblinear_options', 'col']);
+%K2 = hist_isect(testing_data, training_data);
+%[predicted_label, accuracy, decision_values] = predict(testing_label, sparse(K2), model );
 
 %%%% LINEAR TRAINING WITHOUT KERNEL %%%%%%%%%%%%%
 
-%model = train(training_label, sparse(training_data));% [,'liblinear_options', 'col']);
-%[predicted_label, accuracy, decision_values] = predict(testing_label, sparse(testing_data), model );
+model = train(training_label, sparse(training_data));% [,'liblinear_options', 'col']);
+[predicted_label, accuracy, decision_values] = predict(testing_label, sparse(testing_data), model );
 % build a pyramid with a different dictionary size without re-generating the
 % sift descriptors.
 %pyramid_all2 = BuildPyramid(filenames,image_dir,data_dir,1000,100,50,4,1);
