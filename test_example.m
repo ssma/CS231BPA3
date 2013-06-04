@@ -46,20 +46,27 @@ training_data=[];
 training_label = [];
 testing_data = []; %pyramid_all;
 testing_label = [];%labels;
+test_i =[];
+train_i= [];
 for i = 1:length(image_dir)
     I = find(labels ==i);
     if length(I)>100
         k = randperm(length(I));
-        training_data = [training_data; pyramid_all(I(k(1:100)),:)];
+      %  training_data = [training_data; pyramid_all(I(k(1:100)),:)];
+      train_i = [train_i; I(k(1:100))];
         temp(1:100)= i;
         training_label = [training_label; temp'];
        % testing_data(I(k(1:100)),:) =[];
-       testing_data = [testing_data; pyramid_all(I(k(101:end)),:)];
+     %  testing_data = [testing_data; pyramid_all(I(k(101:end)),:)];
        testing_label = [testing_label; labels(I(k(101:end)))];
+       test_i = [test_i; I(k(101:end))];
         %testing_label(I(k(1:100))) = [];
         
     end
 end
+
+training_data = pyramid_all(train_i,:);
+testing_data = pyramid_all(test_i,:);
 
 %K1 = hist_isect(training_data, training_data);
 %model = train(training_label, sparse(K1));% [,'liblinear_options', 'col']);
@@ -68,7 +75,7 @@ end
 
 %%%% LINEAR TRAINING WITHOUT KERNEL %%%%%%%%%%%%%
 
-model = train(training_label, sparse(training_data));% [,'liblinear_options', 'col']);
+model = train(training_label, sparse(training_data), '-v 5');% [,'liblinear_options', 'col']);
 [predicted_label, accuracy, decision_values] = predict(testing_label, sparse(testing_data), model );
 % build a pyramid with a different dictionary size without re-generating the
 % sift descriptors.
