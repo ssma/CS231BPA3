@@ -40,7 +40,9 @@ end
 
 binsHigh = 2^(pyramidLevels-1);
 
-pyramid_all = [];
+pyramid_size = sum(2.^(2 * 0:pyramidLevels-1));
+
+pyramid_all = zeros(size(imageFileList,1), pyramid_size);
 
 for f = 1:size(imageFileList,1)
 
@@ -54,7 +56,7 @@ for f = 1:size(imageFileList,1)
     if(size(dir(outFName),1)~=0 && canSkip)
         fprintf('Skipping %s\n', imageFName);
         load(outFName, 'pyramid');
-        pyramid_all = [pyramid_all; pyramid];
+        pyramid_all(f,:) = pyramid;
         continue;
     end
     
