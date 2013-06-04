@@ -68,7 +68,8 @@ for f = 1:size(imageFileList,1)
     %% load sift descriptors
     load(inFName, 'features');
     ndata = size(features.data,1);
-    ddata = size(features.data,2);
+    %ddata = size(features.data,2);
+    ddata = size(dictionary,1);
     fprintf('Loaded %s, %d descriptors\n', inFName, ndata);
 
     %% find texton indices and compute histogram 
@@ -78,7 +79,7 @@ for f = 1:size(imageFileList,1)
     texton_ind.wid = features.wid;
     texton_ind.hgt = features.hgt;
     %run in batches to keep the memory foot print small
-    batchSize = 10000;
+    batchSize = 500;
     if ndata <= batchSize
         texton_ind.data = LLC(features.data, dictionary, K);
 %        dist_mat = sp_dist2(features.data, dictionary);
@@ -97,7 +98,7 @@ for f = 1:size(imageFileList,1)
     end
 
     H = hist(texton_ind.data, 1:dictionarySize);
-    H_all = [H_all; H];
+   % H_all = [H_all; H];
 
     %% save texton indices and histograms
     save(outFName, 'texton_ind');
@@ -106,7 +107,7 @@ end
 
 %% save histograms of all images in this directory in a single file
 outFName = fullfile(dataBaseDir, sprintf('histograms_%d.mat', dictionarySize));
-save(outFName, 'H_all', '-ascii');
+%save(outFName, 'H_all', '-ascii');
 
 
 end
