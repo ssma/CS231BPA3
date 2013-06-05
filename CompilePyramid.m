@@ -40,8 +40,7 @@ end
 
 binsHigh = 2^(pyramidLevels-1);
 
-pyramid_size = sum(2.^(2 * 0:pyramidLevels-1));
-
+pyramid_size = sum(2.^(2 * (0:pyramidLevels-1))) * dictionarySize
 pyramid_all = zeros(size(imageFileList,1), pyramid_size);
 
 for f = 1:size(imageFileList,1)
@@ -128,8 +127,7 @@ for f = 1:size(imageFileList,1)
 
     % save pyramid
     save(outFName, 'pyramid');
-
-    pyramid_all = [pyramid_all; pyramid];
+    pyramid_all(f,:) = pyramid;
 
 end % f
 
